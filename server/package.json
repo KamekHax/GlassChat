@@ -1,0 +1,21 @@
+{
+  "name": "glasschat-service",
+  "version": "1.0.1",
+  "private": true,
+  "description": "GlassChat central API and realtime service",
+  "scripts": {
+    "start:alpha": "node index.js",
+    "auth:start": "node auth/start.js",
+    "auth:migrate": "node auth/migrate.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "argon2": "^0.45.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.3.0",
+    "nodemailer": "^10.3.1",
+    "pg": "^8.23.1",
+    "socket.io": "^4.8.1"
+  }
+}

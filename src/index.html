@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>GlassChat</title><link rel="stylesheet" href="styles.css"></head>
+<body><main id="app" class="shell">
+  <section id="auth-screen" class="auth-screen glass" aria-labelledby="auth-title">
+    <div class="auth-brand"><div class="brand-mark">G</div><div><span class="eyebrow">A QUIETER KIND OF COMMUNITY</span><h1>GlassChat</h1></div></div>
+    <div class="auth-layout"><div class="auth-intro"><p class="eyebrow">YOUR SPACE, YOUR PEOPLE</p><h2>Good conversations<br><em>start here.</em></h2><p>Sign in to your community, or create an account to join the conversation.</p><div class="auth-orb">✳</div></div>
+    <div class="auth-card glass-inset"><div class="eyebrow" id="auth-eyebrow">WELCOME BACK</div><h2 id="auth-title">Sign in</h2><p class="auth-desc" id="auth-desc">Use your GlassChat account to continue.</p>
+      <form id="auth-form" novalidate>
+        <label id="identity-field">Email or username<input id="identity" autocomplete="username" required></label>
+        <label id="username-field" class="hidden">Username<input id="username" autocomplete="nickname" maxlength="32"></label>
+        <label id="email-field" class="hidden">Email<input id="email" type="email" autocomplete="email"></label>
+        <label id="password-field">Password<input id="password" type="password" autocomplete="current-password"></label>
+        <label id="token-field" class="hidden">Single-use verification token<input id="token" autocomplete="one-time-code" spellcheck="false"></label>
+        <div id="confirm-field" class="hidden"><label>New password<input id="new-password" type="password" autocomplete="new-password"></label></div>
+        <div id="auth-error" class="error" role="alert" aria-live="assertive"></div><div id="auth-info" class="auth-info" role="status" aria-live="polite"></div>
+        <button id="submit-auth" class="primary-btn" type="submit">Sign in</button>
+      </form>
+      <div class="auth-links" id="auth-links"><button type="button" data-view="register">Create account</button><button type="button" data-view="forgot">Forgot password?</button><button type="button" data-view="verify">Verify email</button></div>
+      <button id="back-login" class="text-btn hidden" type="button" data-view="login">Back to sign in</button>
+      <button id="verify-resend" class="text-btn hidden" type="button">Resend verification email</button>
+      <details class="endpoint"><summary>Service URL configuration</summary><p>This is the GlassChat service URL used by this app.</p><label for="service-url">Service URL</label><div class="endpoint-row"><input id="service-url" type="url" autocomplete="url" placeholder="http://localhost:3211"><button id="save-endpoint" type="button" class="secondary-btn">Save</button></div><div id="endpoint-error" class="error" role="alert"></div></details>
+    </div></div><p class="auth-foot">Private by design <span>·</span> GlassChat <span id="app-version-auth">v—</span></p>
+  </section>
+  <div id="chat-screen" class="chat-layout hidden">
+    <aside class="rail"><div class="brand-mark">G</div><div class="rail-line"></div><div class="rail-icon selected" aria-hidden="true">⌂</div><div class="rail-bottom"><div class="online-dot"></div></div></aside>
+    <aside class="sidebar glass"><header class="side-head"><div><div class="eyebrow">YOUR COMMUNITY</div><h1 id="community-name">GlassChat</h1></div></header>
+      <div class="server-status"><span id="connection-dot" class="status-dot"></span><span id="connection-label">Connecting…</span></div>
+      <div class="section-title"><span>CHANNELS</span></div><nav id="channels" class="channel-list" aria-label="Community channels"></nav><div id="channel-empty" class="muted-note hidden">No channels are available.</div>
+      <div class="sidebar-spacer"></div><div class="profile glass-inset"><div class="avatar current-avatar">?</div><div class="profile-copy"><b id="profile-name">Member</b><span id="profile-state">Signed in</span></div><button id="logout" class="text-btn logout-btn" type="button">Sign out</button></div>
+    </aside>
+    <section class="main-panel"><header class="topbar glass"><div class="room-title"><span class="hash">#</span><b id="room-name">Choose a channel</b><span class="top-divider"></span><span id="topic" class="topic"></span></div><div class="top-actions"><span class="members-count"><i class="online-dot"></i><span id="member-count">0</span> online</span></div></header>
+      <section id="welcome" class="welcome"><div class="welcome-orb"><span>✳</span></div><p class="eyebrow">A FRESH START</p><h2>Make yourself<br><em>at home.</em></h2><p class="welcome-copy">Choose a channel to join the conversation.</p></section>
+      <section id="messages" class="messages" aria-live="polite" aria-label="Channel messages"></section><div id="typing" class="typing" aria-live="polite"></div>
+      <footer class="composer-wrap"><div class="composer glass"><textarea id="message-input" rows="1" maxlength="4000" placeholder="Choose a channel first" aria-label="Message" disabled></textarea><div class="composer-tools"><span class="hint">Enter to send</span><button id="send-btn" class="send-btn" type="button" title="Send message" aria-label="Send message" disabled>↑</button></div></div><div class="footnote">Be kind. Keep it human. <span>GLASSCHAT</span><span id="app-version-chat">v—</span></div></footer>
+    </section>
+    <aside class="members glass"><div class="member-head"><div class="eyebrow">IN THIS ROOM</div><span id="room-count" class="count-pill">0</span></div><div class="member-group">ONLINE <span id="online-count">0</span></div><div id="member-list"></div><div class="member-note"><span class="note-orb">✳</span><b>Good company.</b><p>Everything is better when shared.</p></div></aside>
+  </div>
+</main><script src="renderer.js"></script></body></html>

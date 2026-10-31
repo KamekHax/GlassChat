@@ -42,6 +42,14 @@ invariant(config.repository === 'KamekHax/GlassChat', 'repository must match the
 const originUrl = new URL(config.origin);
 invariant(originUrl.protocol === 'https:' && originUrl.pathname.replace(/\/$/, '') === '/GlassChat', 'origin must be the configured HTTPS GitHub Pages project URL');
 const origin = config.origin.replace(/\/$/, '');
+const apiBaseUrl = String(config.apiBaseUrl || '');
+let apiOrigin = '';
+if (apiBaseUrl) {
+  const apiUrl = new URL(apiBaseUrl);
+  invariant(apiUrl.protocol === 'https:' && apiUrl.origin === apiBaseUrl && !apiUrl.username && !apiUrl.password, 'apiBaseUrl must be a public HTTPS origin with no path, query, fragment or credentials');
+  apiOrigin = apiUrl.origin;
+}
+const connectSources = ["'self'", ...(apiOrigin ? [apiOrigin] : [])].join(' ');
 const manifestPaths = routeManifest.routes.map(route => route.path).sort();
 const pagePaths = pageConfig.pages.map(page => page.route).sort();
 invariant(JSON.stringify(manifestPaths) === JSON.stringify(pagePaths), 'pages.json and manus-routes.json must contain the same routes');
@@ -217,11 +225,14 @@ for (const page of pageConfig.pages) {
     .replaceAll('{{OG_IMAGE}}', escapeHtml(ogImage))
     .replaceAll('{{ROOT}}', rootPrefix)
     .replaceAll('{{PAGE_ID}}', escapeHtml(page.id))
+    .replaceAll('{{CONNECT_SOURCES}}', connectSources)
+    .replaceAll('{{API_BASE_URL}}', escapeHtml(apiBaseUrl))
+    .replace('{{ROBOTS_META}}', page.indexable === false ? '<meta name="robots" content="noindex,nofollow">' : '')
     .replace('{{CONTENT}}', renderedContent);
   const file = path.join(out, routePath, 'index.html');
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, html);
-  sitemapEntries.push(`  <url><loc>${escapeHtml(canonical)}</loc></url>`);
+  if (page.indexable !== false) sitemapEntries.push(`  <url><loc>${escapeHtml(canonical)}</loc></url>`);
 }
 
 const notFoundFragment = await readFile(path.join(src, 'pages/404.html'), 'utf8');
@@ -232,6 +243,9 @@ const notFoundHtml = template
   .replaceAll('{{OG_IMAGE}}', `${origin}/assets/app-preview.webp`)
   .replaceAll('{{ROOT}}', '')
   .replaceAll('{{PAGE_ID}}', 'not-found')
+  .replaceAll('{{CONNECT_SOURCES}}', connectSources)
+  .replaceAll('{{API_BASE_URL}}', escapeHtml(apiBaseUrl))
+  .replace('{{ROBOTS_META}}', '')
   .replace('{{CONTENT}}', notFoundFragment.replaceAll('{{ROOT}}', ''))
   .replace('</head>', '  <meta name="robots" content="noindex,follow">\n</head>');
 await writeFile(path.join(out, '404.html'), notFoundHtml);

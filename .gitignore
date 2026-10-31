@@ -1,0 +1,21 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.auth.example
+!.env.example
+
+# Installed dependencies
+node_modules/
+server/node_modules/
+
+# Local runtime state and logs
+server/data.json
+*.log
+npm-debug.log*
+
+# Generated builds and test outputs
+release/
+coverage/
+.DS_Store
+Thumbs.db
+*.tmp

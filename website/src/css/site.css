@@ -243,3 +243,16 @@
 @supports not ((backdrop-filter: blur(1px))) {
   .glass, .primary-nav.is-open { background: var(--surface-strong); }
 }
+
+
+@layer components {
+  .auth-action-page { max-width: 760px; margin-inline: auto; }
+  .auth-action-card { display: grid; gap: 12px; max-width: 620px; }
+  .auth-action-card label { color: var(--ink); font-size: 12px; font-weight: 680; }
+  .auth-action-card input { width: 100%; min-height: 46px; padding: 0 13px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface-strong); color: var(--ink); font: inherit; }
+  .auth-action-card input:focus-visible { outline: 2px solid var(--lavender); outline-offset: 2px; }
+  .auth-action-card button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
+  .auth-status { min-height: 1.7em; margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+  .auth-status[data-state="success"] { color: var(--mint); }
+  .auth-status[data-state="error"] { color: var(--gold); }
+}

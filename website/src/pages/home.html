@@ -6,13 +6,13 @@
     <div class="badge-row" aria-label="Current build details">
       <span class="pill"><i class="pill-dot" aria-hidden="true"></i>Beta · not a stable release</span>
       <span class="pill">Windows x64</span>
-      <span class="pill">v1.0.1 · build 20261031.1</span>
+      <span class="pill">v1.0.1 · source build 20261031.2</span>
     </div>
     <div class="actions">
       <a class="button button-primary" href="{{ROOT}}downloads/">Windows download status <span aria-hidden="true">→</span></a>
       <a class="button button-quiet" href="{{ROOT}}docs/">Read the documentation</a>
     </div>
-    <p class="hero-note">The 1.0.1 installer is an unpublished, unsigned candidate. No public GlassChat chat service is available yet, so this site does not link to that local build.</p>
+    <p class="hero-note">Build 20261031.2 is source-only; a matching Windows installer has not been built or published. No public GlassChat chat service is available yet, so this site does not link to local installer candidates.</p>
   </div>
   <figure class="hero-visual">
     <div class="preview-frame glass">
@@ -33,7 +33,7 @@
 <section class="section" aria-labelledby="today-heading">
   <div class="section-heading"><p class="eyebrow">What is in the source Beta</p><h2 id="today-heading">A small, working text-chat foundation.</h2><p>These are capabilities present in the application source and tests. They are not a claim that a public hosted service is available.</p></div>
   <div class="card-grid">
-    <article class="glass-card"><span class="card-symbol" aria-hidden="true">#</span><h3>Commons · #general</h3><p>The Beta seeds one community and one general text channel. Member-scoped history, live messages, presence and typing are implemented in the backend/client slice.</p></article>
+    <article class="glass-card"><span class="card-symbol" aria-hidden="true">#</span><h3>Commons · #general</h3><p>The Beta seeds one community and one general text channel. Member-scoped history, live messages, presence and typing are implemented in the backend/client slice. Channel text is stored centrally as readable plaintext at the application layer.</p></article>
     <article class="glass-card"><span class="card-symbol" aria-hidden="true">G</span><h3>GlassChat-owned accounts</h3><p>Email/password registration, Argon2id password hashing, verification and recovery tokens, revocable SQL sessions and server-side membership checks are implemented in source. There is no public account service yet.</p></article>
     <article class="glass-card"><span class="card-symbol" aria-hidden="true">↗</span><h3>A roadmap without guesswork</h3><p>Direct messages, profiles, uploads, voice and video are not implemented. See what is delivered, still gated, and only planned.</p></article>
   </div>

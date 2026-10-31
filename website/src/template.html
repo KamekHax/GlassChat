@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111019">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src {{CONNECT_SOURCES}}; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="glasschat-api-base" content="{{API_BASE_URL}}">
+  {{ROBOTS_META}}
   <meta name="keywords" content="GlassChat, community chat, desktop chat, Windows text chat, Liquid Glass">
   <meta name="description" content="{{DESCRIPTION}}">
   <meta property="og:type" content="website">
@@ -52,10 +54,10 @@
     <div class="footer-main">
       <div class="footer-brand"><img src="{{ROOT}}assets/glasschat-mark.webp" width="34" height="34" alt=""><div><b>GlassChat</b><p>A focused text-chat Beta. Honest about what's here.</p></div></div>
       <div class="footer-links" aria-label="Footer navigation">
-        <a href="{{ROOT}}docs/">Docs</a><a href="{{ROOT}}downloads/">Releases</a><a href="{{ROOT}}roadmap/">Roadmap</a><a href="{{ROOT}}support/">Support</a><a href="{{ROOT}}security/">Security</a><a href="{{ROOT}}legal/privacy/">Legal drafts</a>
+        <a href="{{ROOT}}docs/">Docs</a><a href="{{ROOT}}downloads/">Releases</a><a href="{{ROOT}}roadmap/">Roadmap</a><a href="{{ROOT}}support/">Support</a><a href="{{ROOT}}security/">Security</a><a href="{{ROOT}}legal/privacy/">Privacy</a><a href="{{ROOT}}legal/terms/">Terms</a><a href="{{ROOT}}legal/community-guidelines/">Community Guidelines</a><a href="{{ROOT}}legal/acceptable-use/">Acceptable Use</a><a href="{{ROOT}}legal/storage/">Cookies &amp; storage</a>
       </div>
     </div>
-    <div class="footer-bottom"><span>© 2026 GlassChat · Independent project</span><span class="version-chip">v1.0.1 Beta candidate · build 20261031.1 · unpublished</span><a href="https://github.com/KamekHax/GlassChat" rel="noopener noreferrer">Source on GitHub ↗</a></div>
+    <div class="footer-bottom"><span>© 2026 GlassChat · Independent project</span><span class="version-chip">v1.0.1 Beta source candidate · build 20261031.2 · unpublished</span><a href="https://github.com/KamekHax/GlassChat" rel="noopener noreferrer">Source on GitHub ↗</a></div>
   </footer>
 </body>
 </html>

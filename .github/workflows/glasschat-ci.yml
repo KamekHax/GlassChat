@@ -1,0 +1,86 @@
+name: GlassChat CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'website/dist/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'website/dist/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: glasschat-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Tests, version and website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install desktop and test dependencies
+        run: npm ci
+
+      - name: Verify app, service, lockfile and website versions
+        run: npm run check:version
+
+      - name: Run regression tests
+        run: npm test
+
+      - name: Build static site
+        working-directory: website
+        env:
+          CI: 'true'
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/build-site.mjs
+
+      - name: Check routes, links, metadata and release safety
+        working-directory: website
+        run: node scripts/check-site.mjs
+
+  windows-package:
+    name: Windows packaging build (not a release)
+    runs-on: windows-latest
+    needs: verify
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install desktop dependencies
+        run: npm ci
+
+      - name: Build NSIS and portable candidates without publishing
+        run: npm run dist:win -- --publish never
+
+      - name: Verify installer and portable candidate versions
+        shell: pwsh
+        run: |
+          $version = node -p "require('./package.json').version"
+          $setup = Get-ChildItem -Path release -Filter "GlassChat-Setup-$version.exe" | Select-Object -First 1
+          $portable = Get-ChildItem -Path release -Filter "*portable*.exe" | Select-Object -First 1
+          if (-not $setup) { throw "Versioned installer GlassChat-Setup-$version.exe was not produced." }
+          if (-not $portable) { throw 'Portable Windows candidate was not produced.' }
+          $productVersion = (Get-Item $setup.FullName).VersionInfo.ProductVersion
+          if ($productVersion -notmatch [regex]::Escape($version)) { throw "Installer metadata version '$productVersion' does not match '$version'." }
+          Write-Host "Verified installer and portable candidate for version $version."

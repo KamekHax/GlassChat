@@ -1,0 +1,93 @@
+{
+  "name": "glasschat-desktop",
+  "version": "1.0.1",
+  "description": "GlassChat community chat desktop client",
+  "author": "GlassChat",
+  "glassChatBuildId": "20261031.2",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server/index.js",
+    "auth:start": "node server/auth/start.js",
+    "auth:migrate": "node server/auth/migrate.js",
+    "test": "node --test test/*.test.js",
+    "check:version": "node scripts/check-version.mjs",
+    "dist:win": "electron-builder --win nsis portable",
+    "dist:win:installer": "electron-builder --win nsis",
+    "dist:win:portable": "electron-builder --win portable",
+    "dist:linux": "electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.14",
+    "argon2": "^0.45.1",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.0.12",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.3.0",
+    "nodemailer": "^10.3.1",
+    "pg": "^8.23.1",
+    "socket.io": "^4.8.1"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.4"
+  },
+  "build": {
+    "appId": "com.glasschat.desktop",
+    "productName": "GlassChat",
+    "copyright": "Copyright © 2026 GlassChat",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/glasschat.ico",
+      "executableName": "GlassChat",
+      "legalTrademarks": "GlassChat",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GlassChat",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "differentialPackage": true,
+      "artifactName": "GlassChat-Setup-${version}.${ext}",
+      "installerIcon": "build/glasschat.ico",
+      "uninstallerIcon": "build/glasschat.ico",
+      "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "GlassChat-Portable-${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Network;InstantMessaging"
+    }
+  }
+}

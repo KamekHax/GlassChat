@@ -8,8 +8,12 @@
     {"path":"/support/","title":"Support"},
     {"path":"/community/","title":"Community"},
     {"path":"/security/","title":"Security"},
-    {"path":"/legal/privacy/","title":"Privacy draft"},
-    {"path":"/legal/terms/","title":"Terms draft"},
-    {"path":"/legal/community-guidelines/","title":"Community guidelines draft"}
+    {"path":"/legal/privacy/","title":"Privacy Policy draft"},
+    {"path":"/legal/terms/","title":"Terms of Service draft"},
+    {"path":"/legal/community-guidelines/","title":"Community Guidelines draft"},
+    {"path":"/legal/acceptable-use/","title":"Acceptable Use Policy draft"},
+    {"path":"/legal/storage/","title":"Cookie and Local Storage draft"},
+    {"path":"/verify-email/","title":"Email verification"},
+    {"path":"/reset-password/","title":"Password reset"}
   ]
 }

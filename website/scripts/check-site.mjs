@@ -38,12 +38,20 @@ for (const page of pages) {
   const canonical = html.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i)?.[1] || '';
   const ogUrl = html.match(/<meta\s+property="og:url"\s+content="([^"]*)"/i)?.[1] || '';
   const ogImage = html.match(/<meta\s+property="og:image"\s+content="([^"]*)"/i)?.[1] || '';
+  const apiBase = html.match(/<meta\s+name="glasschat-api-base"\s+content="([^"]*)"/i)?.[1] || '';
+  const robotsNoindex = /<meta\s+name="robots"\s+content="noindex,nofollow"/i.test(html);
   check(title.length >= 30 && title.length <= 60, `${page.route}: invalid title length ${title.length}`);
   check(description.length >= 50 && description.length <= 160, `${page.route}: invalid description length ${description.length}`);
   check((html.match(/<h1\b/gi) || []).length === 1, `${page.route}: expected exactly one initial HTML h1`);
   check(canonical === url.href, `${page.route}: canonical mismatch`);
   check(ogUrl === url.href, `${page.route}: Open Graph URL mismatch`);
   check(ogImage === `${config.origin.replace(/\/$/, '')}/assets/app-preview.webp`, `${page.route}: Open Graph image mismatch`);
+  check(apiBase === (config.apiBaseUrl || ''), `${page.route}: public API base metadata mismatch`);
+  check(robotsNoindex === (page.indexable === false), `${page.route}: robots metadata does not match indexability`);
+  const csp = html.match(/http-equiv="Content-Security-Policy"\s+content="([^"]*)"/i)?.[1] || '';
+  check(csp.includes("connect-src 'self'"), `${page.route}: CSP must allow same-origin requests`);
+  if (config.apiBaseUrl) check(csp.includes(config.apiBaseUrl), `${page.route}: CSP does not allow the configured API origin`);
+  else check(!/connect-src[^;]*https?:/i.test(csp), `${page.route}: CSP contains an unconfigured external API origin`);
   check(!html.includes('{{') && !html.includes('}}'), `${page.route}: unresolved template token`);
 
   const attributes = html.matchAll(/\b(?:href|src)="([^"]*)"/gi);
@@ -84,6 +92,17 @@ check(notFound.includes('Return to GlassChat home'), '404 page must have a worki
 const robots = await readFile(path.join(dist, 'robots.txt'), 'utf8');
 check(robots.includes(`Sitemap: ${config.origin.replace(/\/$/, '')}/sitemap.xml`), 'robots.txt sitemap URL mismatch');
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const page of pages) check(sitemap.includes(new URL(page.route.replace(/^\//, ''), base).href), `sitemap is missing ${page.route}`);
+for (const page of pages) {
+  const pageUrl = new URL(page.route.replace(/^\//, ''), base).href;
+  if (page.indexable === false) check(!sitemap.includes(pageUrl), `sitemap must not include noindex route ${page.route}`);
+  else check(sitemap.includes(pageUrl), `sitemap is missing ${page.route}`);
+}
+const home = await readFile(filePathForRoute('/'), 'utf8');
+const homeLinks = [...home.matchAll(/\bhref="([^"]*)"/gi)].map(match => new URL(decodeEntities(match[1]), base).pathname);
+for (const route of ['/legal/privacy/', '/legal/terms/', '/legal/community-guidelines/', '/legal/acceptable-use/', '/legal/storage/']) {
+  const expectedPath = new URL(route.replace(/^\//, ''), base).pathname;
+  check(homeLinks.includes(expectedPath), `shared footer is missing legal link ${route}`);
+}
+for (const route of ['/verify-email/', '/reset-password/']) check(pages.some(page => page.route === route && page.indexable === false), `account-action route must be noindex: ${route}`);
 
 console.log(`Site checks passed: ${pages.length} routes, ${checkedTargets} local links/assets, per-route metadata, sitemap/robots, 404 and release-link safeguards.`);

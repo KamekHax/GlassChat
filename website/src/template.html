@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111019">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="keywords" content="GlassChat, community chat, desktop chat, Windows text chat, Liquid Glass">
+  <meta name="description" content="{{DESCRIPTION}}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GlassChat">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESCRIPTION}}">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta property="og:image:alt" content="GlassChat's desktop text-chat interface, showing Commons and the general channel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{DESCRIPTION}}">
+  <meta name="twitter:image" content="{{OG_IMAGE}}">
+  <link rel="canonical" href="{{CANONICAL}}">
+  <link rel="icon" type="image/webp" href="{{ROOT}}assets/glasschat-mark.webp">
+  <link rel="preload" as="image" href="{{ROOT}}assets/app-preview.webp" fetchpriority="high">
+  <link rel="stylesheet" href="{{ROOT}}css/site.css">
+  <script src="{{ROOT}}js/site.js" defer></script>
+  <title>{{TITLE}}</title>
+</head>
+<body data-page="{{PAGE_ID}}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <header class="site-header glass">
+    <a class="brand" href="{{ROOT}}" aria-label="GlassChat home">
+      <img src="{{ROOT}}assets/glasschat-mark.webp" width="42" height="42" alt="">
+      <span class="brand-name">GlassChat<small>COMMUNITY TEXT CHAT</small></span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+      <a data-nav="home" href="{{ROOT}}">Overview</a>
+      <a data-nav="docs" href="{{ROOT}}docs/">Documentation</a>
+      <a data-nav="roadmap" href="{{ROOT}}roadmap/">Roadmap</a>
+      <a data-nav="downloads" href="{{ROOT}}downloads/">Downloads</a>
+      <a class="nav-support" data-nav="support" href="{{ROOT}}support/">Support</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme"><span class="theme-glyph" aria-hidden="true">◐</span><span class="theme-label">Light</span></button>
+  </header>
+  <main id="main" class="page-shell">
+    {{CONTENT}}
+  </main>
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-brand"><img src="{{ROOT}}assets/glasschat-mark.webp" width="34" height="34" alt=""><div><b>GlassChat</b><p>A focused text-chat Beta. Honest about what's here.</p></div></div>
+      <div class="footer-links" aria-label="Footer navigation">
+        <a href="{{ROOT}}docs/">Docs</a><a href="{{ROOT}}downloads/">Releases</a><a href="{{ROOT}}roadmap/">Roadmap</a><a href="{{ROOT}}support/">Support</a><a href="{{ROOT}}security/">Security</a><a href="{{ROOT}}legal/privacy/">Legal drafts</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 GlassChat · Independent project</span><span class="version-chip">v1.0.1 Beta candidate · build 20261031.1 · unpublished</span><a href="https://github.com/KamekHax/GlassChat" rel="noopener noreferrer">Source on GitHub ↗</a></div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "routes": [
+    {"path":"/","title":"GlassChat"},
+    {"path":"/downloads/","title":"Downloads"},
+    {"path":"/docs/","title":"Documentation"},
+    {"path":"/roadmap/","title":"Roadmap"},
+    {"path":"/changelog/","title":"Changelog"},
+    {"path":"/support/","title":"Support"},
+    {"path":"/community/","title":"Community"},
+    {"path":"/security/","title":"Security"},
+    {"path":"/legal/privacy/","title":"Privacy draft"},
+    {"path":"/legal/terms/","title":"Terms draft"},
+    {"path":"/legal/community-guidelines/","title":"Community guidelines draft"}
+  ]
+}

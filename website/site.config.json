@@ -1,0 +1,9 @@
+{
+  "origin": "https://kamekhax.github.io/GlassChat",
+  "repository": "KamekHax/GlassChat",
+  "version": "1.0.1",
+  "buildId": "20261031.1",
+  "channel": "Beta",
+  "windowTarget": "Windows x64",
+  "windowsCompatibility": "Targeted at Windows 10/11; native lifecycle testing is still outstanding"
+}

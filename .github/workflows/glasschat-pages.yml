@@ -1,0 +1,63 @@
+name: Build and deploy GlassChat Pages
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published, edited, released, prereleased]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Check out the current deployment branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          token: ${{ github.token }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build static pages and published release index
+        working-directory: website
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CI: 'true'
+        run: node scripts/build-site.mjs
+
+      - name: Verify generated routes, metadata and links
+        working-directory: website
+        run: node scripts/check-site.mjs
+
+      - name: Upload the Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: website/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

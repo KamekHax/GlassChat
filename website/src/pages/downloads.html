@@ -1,0 +1,36 @@
+<header class="page-intro">
+  <p class="eyebrow">GlassChat for Windows</p>
+  <h1>Downloads and releases.</h1>
+  <p>GitHub Releases is the only official GlassChat distribution source. This page lists published release assets and their checksums; it never links to a local or unreleased installer.</p>
+</header>
+
+<section class="section" aria-labelledby="stable-heading">
+  <div class="section-heading"><span class="section-label">Stable releases</span><h2 id="stable-heading">Latest stable Windows build</h2></div>
+  <div class="release-list">{{LATEST_STABLE}}</div>
+</section>
+
+<section class="section" aria-labelledby="stable-history-heading">
+  <div class="section-heading"><span class="section-label">Release history</span><h2 id="stable-history-heading">Previous stable versions</h2></div>
+  <div class="release-list">{{STABLE_HISTORY}}</div>
+</section>
+
+<section class="section" aria-labelledby="beta-heading">
+  <div class="section-heading"><span class="section-label">Preview channel</span><h2 id="beta-heading">Beta and prerelease builds</h2><p>These are separate from stable releases and may be incomplete. The download link appears only for a real GitHub prerelease containing a GlassChat Windows executable.</p></div>
+  <div class="release-list">{{BETA_RELEASES}}</div>
+</section>
+
+<section class="section split-section" aria-labelledby="requirements-heading">
+  <div class="section-heading"><p class="eyebrow">Before installing</p><h2 id="requirements-heading">System and release status.</h2><p class="body-copy">Version <strong>1.0.1</strong> · build <span class="prose-code">20261031.1</span> is the current local Beta candidate. It has not been published as a GitHub Release.</p></div>
+  <div class="glass-card stack">
+    <p><strong>Supported Windows versions:</strong> none have passed native verification yet; Windows 10 and Windows 11 x64 are the intended targets. Install, upgrade, shortcut, data-preservation and uninstall behavior remains untested on native Windows.</p>
+    <p><strong>System requirements:</strong> the current build targets x64 Windows. Minimum CPU, memory, disk-space and specific OS-build requirements have not been established or published.</p>
+    <p><strong>Signature:</strong> the current candidate is unsigned. Windows SmartScreen may show a warning.</p>
+    <p><strong>Updates:</strong> automatic updates are not enabled. Users will need to install a newer official release manually.</p>
+    <p><strong>Service:</strong> no production GlassChat API is deployed. The packaged client currently points to its local development endpoint.</p>
+    <p><a href="https://github.com/KamekHax/GlassChat/releases" rel="noopener noreferrer">Open the repository's published releases ↗</a></p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="checksums-heading">
+  <div class="callout callout-warning"><strong id="checksums-heading">Verify before installing.</strong> Every published installer should have a displayed SHA-256 value. If a release has no checksum manifest or sidecar, this site will say that the checksum was not provided rather than fabricate one.</div>
+</section>

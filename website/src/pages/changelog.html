@@ -1,0 +1,13 @@
+<header class="page-intro"><p class="eyebrow">Version history</p><h1>Changes, with release status attached.</h1><p>This page separates published GitHub Releases from local development build notes. A version number or candidate artifact is not itself a published release.</p></header>
+
+<section class="section" aria-labelledby="published-changes"><div class="section-heading"><span class="section-label">Official history</span><h2 id="published-changes">Published releases</h2><p>Published release notes are shown from the repository's actual GitHub Releases during the website build.</p></div><div class="release-list">{{CHANGELOG_RELEASES}}</div></section>
+
+<section class="section" aria-labelledby="candidate-heading"><div class="section-heading"><span class="section-label">Development build · unpublished</span><h2 id="candidate-heading">GlassChat 1.0.1 Windows Beta candidate</h2><p>Version 1.0.1 · build <span class="prose-code">20261031.1</span> · build date 2026-10-31. This is local project build history, not a GitHub Release or public download.</p></div>
+  <div class="glass-card stack">
+    <p><strong>Packaging:</strong> per-user NSIS setup and portable Windows x64 candidates were created with GlassChat branding and version metadata.</p>
+    <p><strong>Runtime:</strong> Electron 45.2.1 is included after the previous runtime was upgraded in response to a high-severity advisory.</p>
+    <p><strong>Regression checks:</strong> the existing application suite passed 3/3 tests in the sandbox on 2026-10-31 (authentication/session lifecycle; community membership and realtime messages; legacy server history). This is not native Windows or production-service validation.</p>
+    <p><strong>Still open:</strong> binaries are unsigned; native Windows lifecycle testing, public backend deployment, automatic updates, local-first history and end-to-end encryption are not complete.</p>
+    <p>See the <a href="{{ROOT}}downloads/">download status</a>, <a href="{{ROOT}}roadmap/">roadmap</a> and <a href="{{ROOT}}security/">security page</a>.</p>
+  </div>
+</section>

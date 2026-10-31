@@ -1,6 +1,6 @@
 # GlassChat backend: Render, Neon, email, and desktop URL
 
-**Current state:** Neon Free `glasschat-beta-eu` exists in Frankfurt, but it is not connected or migrated. No Render service or Gmail OAuth sender exists. The user asked to hold Render until email is configured. This guide is preparation only; it does not deploy services or contain credentials. It reflects source build 1.0.1 / `20261031.2` and the current Gmail API adapter.
+**Current state (31 October 2026):** A temporary Render Free service is Live in Frankfurt at `https://glasschat-beta-api.onrender.com`; the Neon Free project `glasschat-beta-eu` is connected and its tracked auth/community migrations have been applied. A temporary Google OAuth External/Testing credential is stored in Render; the owner received a direct Gmail API test email, but GlassChat's registration/verification/reset flows are not yet verified. The refresh token expires after seven days, so this deployment is not durable production. This guide contains no credentials. Source build 1.0.1 / `20261031.3` now points the desktop default and website API base to the service; this source update is pending push and publication.
 
 ## 1. Neon PostgreSQL
 
@@ -8,16 +8,16 @@ Use the existing Neon project in AWS Europe Central 1 (Frankfurt). Keep the proj
 
 Create two connection strings from Neon:
 
-- **Runtime `DATABASE_URL`:** use the pooled hostname (typically includes `-pooler`) for the service's short-lived application queries.
+- **Runtime `DATABASE_URL`:** currently use the direct hostname because Neon pooling is disabled on this project; if pooling is enabled later, use the pooled hostname (typically includes `-pooler`) for runtime queries.
 - **Migration `MIGRATION_DATABASE_URL`:** use the direct hostname (without `-pooler`) for schema migrations. `server/auth/migrate.js` uses a PostgreSQL advisory lock, which requires a direct/session-capable connection rather than Neon transaction pooling.
 
-For a production connection, configure `DATABASE_SSL=true`, `DATABASE_SSL_REJECT_UNAUTHORIZED=true` and a conservative `PG_POOL_MAX` such as 5. Keep these connection strings in the backend host's secret settings only. Before the first migration, review the SQL files and make sure the target is the correct Neon project/branch. No app migration has been applied to Neon yet.
+The service currently uses direct Neon URLs because pooling is disabled on the project endpoint. Both use `sslmode=verify-full` and `channel_binding=require`; Render also sets `DATABASE_SSL=true`, `DATABASE_SSL_REJECT_UNAUTHORIZED=true` and `PG_POOL_MAX=5`. The tracked migrations `001_auth.sql` and `002_community_chat.sql` have been applied to the confirmed `production` branch. Keep all connection strings in protected host settings only. If Neon pooling is enabled later, use its pooled hostname for runtime and retain the direct URL for migrations.
 
-## 2. Email must be configured before creating Render
+## 2. Temporary Gmail OAuth status and limitations
 
-The source includes a Gmail API adapter. It uses `https://www.googleapis.com/auth/gmail.send`, sends as `kamekfnbr@gmail.com`, and requires the OAuth client ID, client secret and refresh token as backend-only secrets. No OAuth authorization or live delivery test has occurred because Google Cloud Console is signed out in both available browsers and the user cannot take over the browser.
+The source includes a Gmail API adapter. It uses `https://www.googleapis.com/auth/gmail.send`, sends as `kamekfnbr@gmail.com`, and requires the OAuth client ID, client secret and refresh token as backend-only secrets. The owner authorized the send-only scope in the app's External/Testing mode, and the owner confirmed receipt of one direct test email. These temporary credentials are stored only in Render's protected environment. The app's actual registration, verification-resend and password-reset flows have not yet been tested end to end.
 
-Google classifies the Gmail send scope as sensitive. External OAuth Testing-mode refresh tokens expire after seven days, so a testing token is not a durable production credential. Google's production verification may require an owned/verified domain; GlassChat currently has no custom domain, and `github.io` is not owned by the project. Resolve this with Google's OAuth console before calling the email service production-ready. Do not bypass Google verification or create a public service with a known-expiring test token without the owner's explicit acceptance of that limitation.
+Google classifies the Gmail send scope as sensitive. External OAuth Testing-mode refresh tokens expire after seven days with this non-basic scope, so the current token is temporary and not a durable production credential. The owner explicitly approved using it for a temporary deployment test; the app remains in Testing. Do not promote the app, imply Google verification, or treat this sender as production-ready. Review the separate Production/unverified analysis in the operator guide before any status change.
 
 No verified no-domain option currently meets all three constraints—0 DKK/month, arbitrary-user delivery, and durable production operation:
 
@@ -26,29 +26,29 @@ No verified no-domain option currently meets all three constraints—0 DKK/month
 - Amazon SES can use an individually verified sender address, but sandbox recipients also need verification, production access requires AWS approval, and SES is metered rather than guaranteed free.
 - SMTP is not suitable for Render Free: Render documents restrictions on common outbound SMTP ports.
 
-Do not create the Render service until OAuth authorization is durable enough for the intended test and a controlled verification/reset email has actually been received. Never paste OAuth secrets into source, website, logs, chat, or this guide.
+Never paste OAuth secrets into source, website, logs, chat, or this guide. The temporary Render deployment must be treated as a time-limited test; arrange a durable provider/token strategy before the seven-day token expiry if continued public testing is required.
 
-## 3. Render Free prototype (after email gate)
+## 3. Current Render Free temporary test service
 
-When the sender is configured, create a Render **Web Service** from `KamekHax/GlassChat` with **Root Directory** `server`, region Frankfurt, Free plan, Node.js 20 or newer, and build command:
-
-```sh
-npm ci --omit=dev
-```
-
-Use this start command so migrations use the direct Neon connection before the API starts using the pooled runtime `DATABASE_URL`:
+The existing Render **Web Service** uses `KamekHax/GlassChat` `main`, an unset Root Directory, Frankfurt region, Free plan, Node.js 22, and this build command:
 
 ```sh
-DATABASE_URL="$MIGRATION_DATABASE_URL" npm run auth:migrate && npm run auth:start
+cd server && npm ci --omit=dev
 ```
 
-The service now honors Render's injected `PORT`; set `AUTH_HOST=0.0.0.0`. Set the health-check path to `/health`. Render Free is a prototype: cold starts, sleeping, interruptions and finite quotas are expected. The app currently uses a 15-second request timeout, so a cold-start request may require retry.
+The service uses this start command so each deployment applies idempotent migrations through the direct Neon connection before starting the API:
+
+```sh
+cd server && DATABASE_URL="$MIGRATION_DATABASE_URL" npm run auth:migrate && npm run auth:start
+```
+
+The service honors Render's injected `PORT`; `AUTH_HOST=0.0.0.0` and health-check path `/health` are configured. Render Free is a prototype: cold starts, sleeping, interruptions and finite quotas are expected. The app currently uses a 15-second request timeout, so a cold-start request may require retry.
 
 Set these service environment values. Add all items marked secret through Render's protected environment UI; never put actual values in GitHub:
 
 ```text
 NODE_ENV=production
-DATABASE_URL=<Neon pooled connection string>
+DATABASE_URL=<Neon direct connection string; current endpoint pooling is disabled>
 MIGRATION_DATABASE_URL=<Neon direct connection string>
 DATABASE_SSL=true
 DATABASE_SSL_REJECT_UNAUTHORIZED=true
@@ -64,19 +64,19 @@ GMAIL_OAUTH_REFRESH_TOKEN=<secret>
 GMAIL_FROM=kamekfnbr@gmail.com
 ```
 
-Important: `APP_ORIGIN` is the **website origin** used by exact-origin CORS, not the Render service URL. `APP_BASE_URL` is the GitHub Pages project URL used to build verification/reset links. Render provides the API's own `PORT` and `onrender.com` service hostname. Do not set the website CSP/API base to a Render URL until that service is deployed and health-checked.
+Important: `APP_ORIGIN` is the **website origin** used by exact-origin CORS, not the Render service URL. `APP_BASE_URL` is the GitHub Pages project URL used to build verification/reset links. Render provides the API's own `PORT` and `onrender.com` service hostname. Source build .3 sets the desktop default and website `apiBaseUrl` to the verified HTTPS service origin; the site CSP allows that origin. The update still requires a push and public Pages check.
 
-After deployment, the service's `/health` endpoint should return JSON containing `"ok": true`. A working health check alone does not prove email, authentication, database migrations or chat behavior; test these with controlled accounts before publishing a service-available status.
+The `/health` endpoint returned HTTP 200 with `"ok": true`; Render logs confirmed migrations and startup, and a read-only Neon table listing confirmed the expected schema. A health check does not prove account verification/reset, CORS from the live Pages origin, or chat behavior; test those with controlled accounts before claiming those flows work.
 
 ## 4. Point the desktop app at the deployed API
 
-The Electron client saves its service URL under its per-user settings file and offers a **Service URL configuration** control on the sign-in screen. After a real Render HTTPS service exists, enter its exact origin, for example `https://<service-name>.onrender.com`, and save. Do not append `/api/auth`, `/socket.io`, a query, or a path. Saving a changed host signs out the previous session; sign in again afterward. Loopback HTTP is allowed only for local development.
+The Electron client saves its service URL under its per-user settings file and offers a **Service URL configuration** control on the sign-in screen. Source build `20261031.3` defaults to `https://glasschat-beta-api.onrender.com` and migrates only the prior hard-coded localhost default. Do not append `/api/auth`, `/socket.io`, a query, or a path. Saving a changed host signs out the previous session; sign in again afterward. Loopback HTTP is allowed only for local development.
 
-To set the production default for future builds, use `GLASSCHAT_API_URL` or update the guarded default in `src/main.js` to the verified service origin, then rebuild the desktop app. Do not ship a hard-coded example hostname. Existing installations can use the settings control without reinstalling.
+`GLASSCHAT_API_URL` remains an override for local or future instances. Keep `website/site.config.json`'s `apiBaseUrl` equal to the desktop default; `npm run check:version` enforces this when the public API URL is configured. Existing intentional custom URLs are preserved.
 
 ## 5. Current limits
 
-The central service has one seeded Commons community and `#general` text chat; channel text is stored centrally as readable plaintext at the application layer. There is no local-first history or end-to-end encryption. Direct messages, voice/video, screen sharing, account deletion, moderation/reporting and automatic updates are not implemented. The current Windows candidates are build `20261031.1`; they do not match source build `20261031.2` and have not passed native Windows lifecycle checks.
+The central service has one seeded Commons community and `#general` text chat; channel text is stored centrally as readable plaintext at the application layer. There is no local-first history or end-to-end encryption. Direct messages, voice/video, screen sharing, account deletion, moderation/reporting and automatic updates are not implemented. The current source is build `20261031.3`; earlier Windows candidates are build `20261031.1`, do not match, and have not passed native Windows lifecycle checks.
 
 ## Official references
 

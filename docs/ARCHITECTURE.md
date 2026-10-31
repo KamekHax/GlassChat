@@ -22,21 +22,21 @@ Channel message text is stored centrally in PostgreSQL as readable plaintext at 
 
 ## Database and hosting
 
-A Neon Free PostgreSQL project `glasschat-beta-eu` exists in AWS Europe Central 1 (Frankfurt), but it is not yet connected and no application migration has been run against it. Regression tests use isolated PGlite/temp fixtures. Production credentials belong only in the backend host's secret settings.
+A Neon Free PostgreSQL project `glasschat-beta-eu` in AWS Europe Central 1 (Frankfurt) is connected to the temporary Render service. Tracked auth and community migrations are applied to the production branch. Regression tests use isolated PGlite/temp fixtures; production credentials belong only in the backend host's protected secret settings.
 
-Render Free is approved only as a 0-DKK prototype; it may sleep, cold-start, interrupt and enforce finite quotas. No Render service exists. The user instructed that its creation wait until the email path is configured. The service listens on `AUTH_HOST` and honors Render's injected `PORT`; in production it expects `AUTH_HOST=0.0.0.0`, an HTTPS `APP_ORIGIN` and one trusted reverse proxy.
+The temporary Render Free service is approved only as a 0-DKK test prototype; it may sleep, cold-start, interrupt and enforce finite quotas. Its service origin is `https://glasschat-beta-api.onrender.com`, and `/health` has returned HTTP 200. The backend listens on `AUTH_HOST` and honors Render's injected `PORT`; it expects `AUTH_HOST=0.0.0.0`, an HTTPS `APP_ORIGIN` and one trusted reverse proxy.
 
 ## Email and static account actions
 
-The backend source includes a Gmail API adapter that sends verification and password-reset messages as the operator-authorized Gmail account. It is not configured: there is no OAuth client authorization, refresh token or live delivery test. The Gmail `gmail.send` scope requires Google OAuth review for public production use; a Testing-mode refresh token is temporary. The GitHub Pages project origin is not a domain the operator controls, so the domain-verification requirement must be resolved before durable public mail is promised.
+The backend source includes a Gmail API adapter that sends verification and password-reset messages as the operator-authorized Gmail account. Google OAuth remains External/Testing, with the owner as the sole test user and only the sensitive `gmail.send` scope. The owner received one direct test email. The Testing refresh token expires after seven days, so email is temporary and is not production-ready. The GitHub Pages project origin is not a domain the operator controls; domain/verification requirements remain unresolved before durable public mail is promised.
 
-The website source has no-index verification/reset pages. One-time tokens are placed in URL fragments, removed from the visible URL when the user submits, and sent to the configured API with cookies omitted. The generated API base is intentionally blank. The pages cannot complete account actions until a real HTTPS API origin and mail delivery are configured and verified.
+The website source has no-index verification/reset pages. One-time tokens are placed in URL fragments, removed from the visible URL when the user submits, and sent to the configured API with cookies omitted. The API base now points to the temporary Render HTTPS service. The owner confirmed receipt of one direct Gmail API test email, but the actual verification/reset pages and account flows have not been exercised end to end; the Testing-mode refresh token expires after seven days.
 
 ## Current operational state
 
-- Static website foundation is live at <https://kamekhax.github.io/GlassChat/>; the expanded 15-route source revision is not yet published.
-- The target repository clone contains the imported app/backend source locally; it has not yet been pushed.
-- Most recent repository tests after the mailer/CORS source changes passed 7/7.
-- Neon project exists but is not connected/migrated; Render does not exist; Gmail OAuth is unconfigured.
-- The current source is 1.0.1 / build `20261031.2`; earlier unsigned Windows artifacts are build `20261031.1`, not current and not published. Native Windows lifecycle testing is still required.
+- The official 15-route site is live at <https://kamekhax.github.io/GlassChat/>. A Pages run deployed commit `2cf206573f747b8f6e99e6efdca841ded0ca6282`; follow-up source build .3 is pending publication.
+- App/backend source is integrated on `KamekHax/GlassChat` `main`; CI passed the seven-test suite, site checks and Windows packaging for the previous source build.
+- Temporary Render Free service `https://glasschat-beta-api.onrender.com` is Live in Frankfurt. Its `/health` endpoint returned HTTP 200 and the exact website-origin CORS preflight succeeded.
+- Neon Free Frankfurt is connected; migrations `001_auth.sql` and `002_community_chat.sql` are applied. Gmail OAuth remains External/Testing with a temporary seven-day token; the owner received a test email, but no GlassChat account flow has been validated end to end.
+- The current source is 1.0.1 / build `20261031.3`; earlier unsigned Windows artifacts are build `20261031.1`, not current and not published. Native Windows lifecycle testing is still required.
 - The five legal pages are working drafts, not final legal advice. The operator legal name/address and complete retention/deletion/rights facts require review.

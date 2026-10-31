@@ -6,13 +6,13 @@
     <div class="badge-row" aria-label="Current build details">
       <span class="pill"><i class="pill-dot" aria-hidden="true"></i>Beta · not a stable release</span>
       <span class="pill">Windows x64</span>
-      <span class="pill">v1.0.1 · source build 20261031.2</span>
+      <span class="pill">v1.0.1 · source build 20261031.3</span>
     </div>
     <div class="actions">
       <a class="button button-primary" href="{{ROOT}}downloads/">Windows download status <span aria-hidden="true">→</span></a>
       <a class="button button-quiet" href="{{ROOT}}docs/">Read the documentation</a>
     </div>
-    <p class="hero-note">Build 20261031.2 is source-only; a matching Windows installer has not been built or published. No public GlassChat chat service is available yet, so this site does not link to local installer candidates.</p>
+    <p class="hero-note">Build 20261031.3 is source-only; no matching Windows installer has been published. The GlassChat API is live in a temporary Render Free beta configuration; its Gmail OAuth Testing token expires after seven days, and account flows are not yet verified end to end. This site does not link to local installer candidates.</p>
   </div>
   <figure class="hero-visual">
     <div class="preview-frame glass">
@@ -26,15 +26,15 @@
 <section class="section" aria-labelledby="status-heading">
   <div class="status-panel">
     <span class="status-icon" aria-hidden="true">●</span>
-    <div><span class="section-label">Availability right now</span><p id="status-heading"><strong>The website is public; GlassChat's central service is not deployed.</strong> The client needs a configured HTTPS service to register or sign in. This GitHub Pages site hosts product information only; it does not host accounts or messaging.</p></div>
+    <div><span class="section-label">Availability right now</span><p id="status-heading"><strong>The website and temporary GlassChat API are online.</strong> The API is a Render Free test service and may sleep between requests. Email uses a short-lived OAuth Testing token; registration and recovery have not been verified end to end. This GitHub Pages site hosts product information only; it does not host accounts or messaging.</p></div>
   </div>
 </section>
 
 <section class="section" aria-labelledby="today-heading">
-  <div class="section-heading"><p class="eyebrow">What is in the source Beta</p><h2 id="today-heading">A small, working text-chat foundation.</h2><p>These are capabilities present in the application source and tests. They are not a claim that a public hosted service is available.</p></div>
+  <div class="section-heading"><p class="eyebrow">What is in the source Beta</p><h2 id="today-heading">A small, working text-chat foundation.</h2><p>These capabilities exist in source; only the temporary API deployment and health endpoint have been checked. User account and messaging flows still need end-to-end validation.</p></div>
   <div class="card-grid">
     <article class="glass-card"><span class="card-symbol" aria-hidden="true">#</span><h3>Commons · #general</h3><p>The Beta seeds one community and one general text channel. Member-scoped history, live messages, presence and typing are implemented in the backend/client slice. Channel text is stored centrally as readable plaintext at the application layer.</p></article>
-    <article class="glass-card"><span class="card-symbol" aria-hidden="true">G</span><h3>GlassChat-owned accounts</h3><p>Email/password registration, Argon2id password hashing, verification and recovery tokens, revocable SQL sessions and server-side membership checks are implemented in source. There is no public account service yet.</p></article>
+    <article class="glass-card"><span class="card-symbol" aria-hidden="true">G</span><h3>GlassChat-owned accounts</h3><p>Email/password registration, Argon2id password hashing, verification and recovery tokens, revocable SQL sessions and server-side membership checks are implemented in source. The API is deployed temporarily, but registration, verification and recovery are not yet verified end to end.</p></article>
     <article class="glass-card"><span class="card-symbol" aria-hidden="true">↗</span><h3>A roadmap without guesswork</h3><p>Direct messages, profiles, uploads, voice and video are not implemented. See what is delivered, still gated, and only planned.</p></article>
   </div>
 </section>

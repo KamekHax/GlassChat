@@ -2,12 +2,12 @@
 
 <section class="section" aria-labelledby="published-changes"><div class="section-heading"><span class="section-label">Official history</span><h2 id="published-changes">Published releases</h2><p>Published release notes are shown from the repository's actual GitHub Releases during the website build.</p></div><div class="release-list">{{CHANGELOG_RELEASES}}</div></section>
 
-<section class="section" aria-labelledby="candidate-heading"><div class="section-heading"><span class="section-label">Development build · unpublished</span><h2 id="candidate-heading">GlassChat 1.0.1 Windows Beta source candidate</h2><p>Version 1.0.1 · source build <span class="prose-code">20261031.2</span> · build date 2026-10-31. This is not a Windows installer, GitHub Release or public download.</p></div>
+<section class="section" aria-labelledby="candidate-heading"><div class="section-heading"><span class="section-label">Development build · unpublished</span><h2 id="candidate-heading">GlassChat 1.0.1 Windows Beta source candidate</h2><p>Version 1.0.1 · source build <span class="prose-code">20261031.3</span> · build date 2026-10-31. This is not a Windows installer, GitHub Release or public download.</p></div>
   <div class="glass-card stack">
     <p><strong>Packaging:</strong> the project retains per-user NSIS and portable Windows x64 configuration. Earlier 1.0.1 binaries are unsigned local candidates and do not contain this source build.</p>
-    <p><strong>Account mail:</strong> a Gmail API OAuth adapter and no-index browser action pages for verification/reset are present in source. Live OAuth credentials and message delivery are not configured.</p>
+    <p><strong>Account mail:</strong> the temporary Render deployment has a Gmail API Testing credential. The owner received a one-off test email. The refresh token expires after seven days; registration and password-reset flows have not been tested end to end.</p>
     <p><strong>Regression checks:</strong> the repository's seven automated tests passed in the sandbox on 2026-10-31, including account/session lifecycle, CORS origin restriction, community membership/realtime messages, Gmail API request construction, and legacy server history. This is not a live Gmail, PostgreSQL, Render or native Windows test.</p>
-    <p><strong>Still open:</strong> central backend deployment, Neon migrations, real email authorization/delivery, native Windows lifecycle testing, release signing, automatic updates, local-first history and end-to-end encryption are not complete.</p>
+    <p><strong>Still open:</strong> end-to-end account/email tests, durable email authorization, native Windows lifecycle testing, release signing, automatic updates, local-first history and end-to-end encryption are not complete. The API and Neon schema are deployed only as a temporary Beta test.</p>
     <p>See the <a href="{{ROOT}}downloads/">download status</a>, <a href="{{ROOT}}roadmap/">roadmap</a> and <a href="{{ROOT}}security/">security page</a>.</p>
   </div>
 </section>

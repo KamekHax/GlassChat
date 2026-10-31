@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "GlassChat community chat desktop client",
   "author": "GlassChat",
-  "glassChatBuildId": "20261031.2",
+  "glassChatBuildId": "20261031.3",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",

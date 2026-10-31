@@ -11,9 +11,9 @@ Maintainer references: [architecture](docs/ARCHITECTURE.md), [development](docs/
 
 The verified application slice includes a Windows-oriented Electron client, email/password registration and login, SQL-backed accounts with Argon2id password hashing, community membership, `Commons/#general` text chat, authenticated Socket.IO delivery, channel history, basic presence/typing, and a locally configurable service URL. The account/authentication implementation is GlassChat-owned; Manus authentication is not used.
 
-This is not yet a full Discord replacement. Direct messages, friend relationships, community administration, voice/video, screen sharing, attachments, bots, account deletion, moderation/reporting workflows and automatic updating are not complete. The central service has not yet been deployed or connected to the Neon project. Do not use this Beta for private/E2EE conversations: channel messages are currently stored centrally in PostgreSQL as readable plaintext at the application layer. HTTPS/WSS protects transport, not server-side content. The operator accepted this architecture only for a clearly disclosed limited Beta.
+This is not yet a full Discord replacement. Direct messages, friend relationships, community administration, voice/video, screen sharing, attachments, bots, account deletion, moderation/reporting workflows and automatic updating are not complete. A temporary Render Free API is live and connected to the Frankfurt Neon project. Do not use this Beta for private/E2EE conversations: channel messages are currently stored centrally in PostgreSQL as readable plaintext at the application layer. HTTPS/WSS protects transport, not server-side content. The operator accepted this architecture only for a clearly disclosed limited Beta.
 
-Email verification and password recovery require a configured provider and working public token-link destinations. Until these are verified, do not treat public account registration as operational. The Neon Free project exists in Frankfurt but is not yet connected or migrated. A Render Free deployment is planned only as a prototype, subject to cold starts, interruptions and quotas.
+The owner received one direct Gmail API test email, but no GlassChat registration, verification/resend or password-reset flow has yet been tested end to end. Render currently uses a Google OAuth Testing refresh token that expires after seven days, so this is a temporary deployment, not durable production email. Render Free may cold-start or interrupt requests; Neon remains on its Free plan and quotas apply.
 
 ## Development
 
@@ -26,7 +26,7 @@ npm test
 npm start
 ```
 
-The desktop app uses a service URL saved per user under Electron's user-data directory. In a local development build, the default is `http://127.0.0.1:3211`. A deployed service must use HTTPS/WSS. Until a verified GlassChat backend exists, the packaged app will not be able to register, sign in or chat over the internet.
+The desktop app defaults to `https://glasschat-beta-api.onrender.com` and saves a service URL per user under Electron's user-data directory. Source candidate `20261031.3` migrates the old hard-coded `http://127.0.0.1:3211` default to the hosted URL while preserving intentional custom URLs; its push, Windows package and Pages publication are still pending. For local development, set `GLASSCHAT_API_URL=http://127.0.0.1:3211`. Deployed services must use HTTPS/WSS.
 
 The legacy `server/index.js` listener is a local Alpha prototype using a JSON data file. **Do not expose it publicly.** The centrally hosted Beta API is `server/auth/start.js` and uses PostgreSQL. Keep `server/data.json` as local runtime data; it is deliberately excluded from the repository.
 
@@ -41,7 +41,7 @@ npm run auth:migrate
 npm run auth:start
 ```
 
-Production deployment requires a PostgreSQL `DATABASE_URL`, HTTPS origin and reverse-proxy configuration, private environment variables and a configured email provider. Never commit passwords, tokens, database URLs or OAuth credentials. `.env.auth.example` contains variable names and placeholders only. Use tracked SQL migrations; do not apply an unreviewed migration to a production database.
+The temporary Render deployment uses PostgreSQL, HTTPS, reverse-proxy configuration and private environment variables. Never commit passwords, tokens, database URLs or OAuth credentials. `.env.auth.example` contains variable names and placeholders only. Use tracked SQL migrations; do not apply an unreviewed migration to a production database.
 
 ## Windows builds and releases
 

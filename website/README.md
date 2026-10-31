@@ -13,7 +13,7 @@ python3 -m http.server 3000 --directory website/dist
 
 The builder uses only Node.js built-ins. It reads public metadata from `website/site.config.json`, route/page content from `website/src/`, and published releases from the GitHub Releases API. For a local preview it continues with an explicit unavailable/no-release panel if the public API cannot be reached. In GitHub Actions, an API failure stops the build so it cannot deploy stale or unverified release links.
 
-The current source snapshot is version 1.0.1 / build `20261031.2`, marked unpublished. `apiBaseUrl` is deliberately blank until a real HTTPS backend has been configured and verified. The source declares 15 routes, including five legal working drafts and two `noindex,nofollow` account-action pages. Keep `website/src/pages.json` and `website/src/manus-routes.json` synchronized when adding a route.
+The current source snapshot is version 1.0.1 / build `20261031.3`, marked unpublished. `apiBaseUrl` points to the temporary Render Free HTTPS API; its Gmail OAuth Testing token expires after seven days, so registration/recovery are not yet claimed as durable. The source declares 15 routes, including five legal working drafts and two `noindex,nofollow` account-action pages. Keep `website/src/pages.json` and `website/src/manus-routes.json` synchronized when adding a route.
 
 ## GitHub Pages deployment
 
@@ -29,6 +29,6 @@ Use the repository's **Releases** tab to publish a GlassChat release and attach 
 
 To display SHA-256 values, attach a sidecar such as `GlassChat-Setup-<version>.exe.sha256`, a `SHA256SUMS.txt` manifest, or a JSON release manifest with an `artifacts` array containing `file` and `sha256` fields. Verify checksums against the exact uploaded release binaries. Missing sidecars are shown as not supplied.
 
-Update `website/site.config.json` only when the public origin, repository or current app version/build changes. The current 1.0.1 / `20261031.2` source candidate is unpublished; the older 1.0.1 Windows binaries are build `20261031.1` and do not match. No matching installer exists in a published release. The API base is intentionally blank, automatic updates are disabled, and the central service is not deployed. Do not describe downloads or the public service as available until those facts change and are verified.
+Update `website/site.config.json` only when the public origin, repository or current app version/build changes. The current 1.0.1 / `20261031.3` source candidate is unpublished; older 1.0.1 Windows binaries are build `20261031.1` and do not match. No matching installer exists in a published release. The API base points to a temporary live Render service; automatic updates are disabled, and full account flows remain unverified. Do not link to downloads until a matching installer is published and verified.
 
 No API keys, deployment credentials, database secrets or SMTP passwords belong in this folder or the public site.

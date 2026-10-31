@@ -13,7 +13,7 @@ npm ci
 npm start
 ```
 
-The desktop app reads the default service URL from `GLASSCHAT_API_URL` or falls back to `http://127.0.0.1:3211` for local development. The sign-in screen also has a service URL setting, saved in the current user's app-data directory. Use HTTPS for a deployed backend. Do not set a public production URL until that API has actually been deployed and verified.
+The desktop app reads the service URL from `GLASSCHAT_API_URL` or defaults to `https://glasschat-beta-api.onrender.com`. The sign-in screen also has a service URL setting, saved in the current user's app-data directory. Source candidate `20261031.3` migrates the old hard-coded localhost default to the hosted URL while preserving intentional custom URLs. For local development, set `GLASSCHAT_API_URL=http://127.0.0.1:3211`; deployed backends must use HTTPS/WSS. The source candidate has not yet been packaged for Windows.
 
 ## Backend service
 
@@ -49,7 +49,7 @@ node website/scripts/build-site.mjs
 node website/scripts/check-site.mjs
 ```
 
-The build reads public routes from `website/src/pages.json` and `website/src/manus-routes.json`, and actual releases from GitHub Releases. Its generated `website/dist/` is output, not source. Do not set `apiBaseUrl` in `website/site.config.json` until an HTTPS backend origin is live. Keep the five legal pages marked as working drafts until reviewed.
+The build reads public routes from `website/src/pages.json` and `website/src/manus-routes.json`, and actual releases from GitHub Releases. Its generated `website/dist/` is output, not source. `website/site.config.json` now points to the temporary Render HTTPS API; keep it synchronized with the desktop default. The five legal pages remain working drafts until reviewed.
 
 ## Windows distribution
 
@@ -61,4 +61,4 @@ npm run dist:win:installer
 npm run dist:win:portable
 ```
 
-Outputs go under `release/`. Current source build `20261031.2` has not yet been packaged. Earlier `20261031.1` candidates are unsigned and do not represent the current source. Do not publish artifacts until the version, Windows install/upgrade/data-retention/uninstall behavior, checksum and release provenance are verified on Windows.
+Outputs go under `release/`. The current source build is `20261031.3`; the next Windows CI run will package matching candidates. Earlier `20261031.1` candidates are unsigned and do not represent the current source. Do not publish artifacts until the version, Windows install/upgrade/data-retention/uninstall behavior, checksum and release provenance are verified on Windows.

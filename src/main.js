@@ -4,7 +4,8 @@ const fs = require('node:fs');
 const { io } = require('socket.io-client');
 const { glassChatBuildId } = require('../package.json');
 
-const DEFAULT_API = process.env.GLASSCHAT_API_URL || 'http://127.0.0.1:3211';
+const DEFAULT_API = process.env.GLASSCHAT_API_URL || 'https://glasschat-beta-api.onrender.com';
+const LEGACY_LOCAL_DEFAULT = 'http://127.0.0.1:3211';
 const isLoopback = host => ['localhost', '127.0.0.1', '::1'].includes(host.replace(/^\[|\]$/g, '').toLowerCase());
 let win, apiBase = DEFAULT_API, auth = null, socket = null, activeChannel = null, presenceUsers = [];
 
@@ -21,7 +22,13 @@ function logStartup() {
   } catch {}
 }
 function loadConfig() {
-  try { const c = JSON.parse(fs.readFileSync(configFile(), 'utf8')); apiBase = validateApiBase(c.apiBase || DEFAULT_API); } catch { apiBase = validateApiBase(DEFAULT_API); }
+  try {
+    const c = JSON.parse(fs.readFileSync(configFile(), 'utf8'));
+    const savedApi = c.apiBase || DEFAULT_API;
+    const migrateLegacyDefault = savedApi === LEGACY_LOCAL_DEFAULT && DEFAULT_API !== LEGACY_LOCAL_DEFAULT;
+    apiBase = validateApiBase(migrateLegacyDefault ? DEFAULT_API : savedApi);
+    if (migrateLegacyDefault) saveConfig();
+  } catch { apiBase = validateApiBase(DEFAULT_API); }
 }
 function saveConfig() {
   fs.mkdirSync(app.getPath('userData'), { recursive: true });

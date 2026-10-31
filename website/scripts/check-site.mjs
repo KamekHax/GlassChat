@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = path.join(root, 'src');
 const dist = path.join(root, 'dist');
 const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
+const siteInfo = JSON.parse(await readFile(path.join(src, 'data/site-info.json'), 'utf8'));
 const pages = JSON.parse(await readFile(path.join(src, 'pages.json'), 'utf8')).pages;
 const manifest = JSON.parse(await readFile(path.join(dist, 'manus-routes.json'), 'utf8'));
 const base = new URL(`${config.origin.replace(/\/$/, '')}/`);
@@ -14,6 +15,8 @@ let checkedTargets = 0;
 function check(condition, message) {
   if (!condition) throw new Error(`GlassChat site check failed: ${message}`);
 }
+check(siteInfo.version === config.version, 'site-info semantic version does not match site configuration');
+check(siteInfo.buildId === config.buildId, 'site-info build ID does not match site configuration');
 function filePathForRoute(route) {
   const relative = route === '/' ? '' : route.replace(/^\//, '').replace(/\/$/, '');
   return path.join(dist, relative, 'index.html');
@@ -33,6 +36,8 @@ for (const page of pages) {
   const file = filePathForRoute(page.route);
   const html = await readFile(file, 'utf8');
   const url = new URL(page.route.replace(/^\//, ''), base);
+  check(html.includes(`v${config.version}`), `${page.route}: missing current semantic version in shared site identity`);
+  check(html.includes(config.buildId), `${page.route}: missing current source build ID in shared site identity`);
   const title = html.match(/<title>([^<]*)<\/title>/i)?.[1] || '';
   const description = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i)?.[1] || '';
   const canonical = html.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i)?.[1] || '';
@@ -99,9 +104,17 @@ for (const page of pages) {
 }
 const home = await readFile(filePathForRoute('/'), 'utf8');
 const homeLinks = [...home.matchAll(/\bhref="([^"]*)"/gi)].map(match => new URL(decodeEntities(match[1]), base).pathname);
+for (const route of ['/', '/docs/', '/changelog/']) {
+  const pageHtml = await readFile(filePathForRoute(route), 'utf8');
+  check(pageHtml.includes(config.buildId), `${route}: current source build ID is not stated in page content`);
+}
 for (const route of ['/legal/privacy/', '/legal/terms/', '/legal/community-guidelines/', '/legal/acceptable-use/', '/legal/storage/']) {
   const expectedPath = new URL(route.replace(/^\//, ''), base).pathname;
   check(homeLinks.includes(expectedPath), `shared footer is missing legal link ${route}`);
+  const legalHtml = await readFile(filePathForRoute(route), 'utf8');
+  check(legalHtml.includes('mailto:kamekfnbr@gmail.com'), `${route}: missing approved legal/contact email`);
+  check(legalHtml.includes('31 October 2026'), `${route}: missing initial last-updated date`);
+  check(/Working draft/i.test(legalHtml), `${route}: missing working-draft disclosure`);
 }
 for (const route of ['/verify-email/', '/reset-password/']) check(pages.some(page => page.route === route && page.indexable === false), `account-action route must be noindex: ${route}`);
 

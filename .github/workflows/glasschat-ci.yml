@@ -83,4 +83,22 @@ jobs:
           if (-not $portable) { throw 'Portable Windows candidate was not produced.' }
           $productVersion = (Get-Item $setup.FullName).VersionInfo.ProductVersion
           if ($productVersion -notmatch [regex]::Escape($version)) { throw "Installer metadata version '$productVersion' does not match '$version'." }
-          Write-Host "Verified installer and portable candidate for version $version."
+          $portableVersion = (Get-Item $portable.FullName).VersionInfo.ProductVersion
+          if ($portableVersion -notmatch [regex]::Escape($version)) { throw "Portable metadata version '$portableVersion' does not match '$version'." }
+          $manifest = Join-Path $PWD 'release/SHA256SUMS.txt'
+          foreach ($file in @($setup.FullName, $portable.FullName)) {
+            $hash = (Get-FileHash -Path $file -Algorithm SHA256).Hash.ToLowerInvariant()
+            "${hash}  $(Split-Path $file -Leaf)" | Add-Content -Path $manifest -Encoding utf8
+          }
+          Write-Host "Verified installer and portable candidate metadata for version $version."
+
+      - name: Upload Windows candidates (not a release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlassChat-Windows-x64-${{ github.sha }}
+          path: |
+            release/GlassChat-Setup-*.exe
+            release/*portable*.exe
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
